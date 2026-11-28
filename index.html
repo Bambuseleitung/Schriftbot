@@ -131,7 +131,7 @@
     <nav class="tabs" role="tablist" aria-label="Bereiche">
       <button role="tab" id="tab-schreiben" data-view="schreiben" aria-controls="view-schreiben" aria-selected="true"><svg class="icon" aria-hidden="true"><use href="#i-edit"/></svg><span>Schreiben</span></button>
       <button role="tab" id="tab-aufnahme" data-view="aufnahme" aria-controls="view-aufnahme" aria-selected="false"><svg class="icon" aria-hidden="true"><use href="#i-nib"/></svg><span>Eigene Schrift</span></button>
-      <button role="tab" id="tab-blatt" data-view="blatt" aria-controls="view-blatt" aria-selected="false"><svg class="icon" aria-hidden="true"><use href="#i-sheet"/></svg><span class="tab-long tab-neu-wrap">PDF ausfüllen</span><span class="tab-short">Ausfüllen</span><svg id="tab-new" class="tab-new" viewBox="0 0 45.5 23.6" aria-hidden="true"><path d="M2.2 21.5L2 21.6L3.2 18.3L5.6 9.5L6.4 5.4L6.4 3.4L6.2 3.9L6.3 6.2L7.3 11.7L8.1 14.8L9.1 17.5L10.3 19.5L11.9 21.3L12.4 21L15.5 3.8M19.8 3.1L17.7 16.1L16.4 20.9L17 21.2L18 21.2L27.3 19.2M18.8 11.6L18.6 11.8L19.9 12.2L22 12.3L23.1 12.2L24.4 11.6M19.5 4.7L28.8 5L29.8 4.8M33.7 3.5L33.6 3.3L33.4 3.6L32.9 6.1L32.6 9.1L32.5 11.4L33 15L33.9 18L34.8 19.4L36.3 20.7L37.6 20.9L39 20.3L40.4 19.1L41.6 17.3L42.5 15.3L43 13.1L43.4 9.4L43.5 4.7L43.1 2"/></svg><span id="tab-new-sr" class="visually-hidden"> (neu)</span></button>
+      <button role="tab" id="tab-blatt" data-view="blatt" aria-controls="view-blatt" aria-selected="false"><svg class="icon" aria-hidden="true"><use href="#i-sheet"/></svg><span class="tab-long tab-neu-wrap">PDF ausfüllen</span><span class="tab-short">Ausfüllen</span><span class="cap-new">NEU!</span></button>
     </nav>
     <div class="topbar-end">
       <div class="menu-wrap">
@@ -385,74 +385,41 @@
       <div class="panel inspector">
         <div class="panel-head">
           <h2>Ausfüllen</h2>
-          <p id="sheet-info" class="hint">PDFs und Arbeitsblätter in deiner Handschrift ausfüllen.</p>
+          <p id="sheet-info" class="hint">PDF oder Foto öffnen und Antworten in Handschrift eintragen.</p>
         </div>
-        <button id="sheet-open" class="primary wide"><svg class="icon"><use href="#i-upload"/></svg>PDF oder Foto öffnen</button>
-        <input type="file" id="sheet-file" accept="application/pdf,.pdf,image/*" class="visually-hidden" aria-label="PDF oder Foto auswählen" tabindex="-1">
-        <p id="sheet-status" class="status"></p>
-        <p id="sheet-warn" class="status warn"></p>
-        <section class="ki-card" aria-labelledby="ki-card-title">
-          <div class="ki-card-head">
-            <h3 id="ki-card-title"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>KI-Hilfe <span class="beta">Beta</span></h3>
-            <button id="ki-more" class="icon-btn ghost" aria-label="Gemini-Schlüssel einrichten oder ändern" title="Schlüssel"><svg class="icon" aria-hidden="true"><use href="#i-dots"/></svg></button>
-          </div>
-          <button id="ki-fill" class="primary wide"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>Alles ausfüllen</button>
-          <p class="hint small">Findet die Fragen und schreibt Antworten auf die freien Stellen. Einzelne Felder: Feld antippen → „KI-Antwort“.</p>
-          <p class="ki-label">Material · geht automatisch mit</p>
-          <div class="ki-mat ki-mat-fixed"><span><svg class="icon" aria-hidden="true"><use href="#i-sheet"/></svg>Das geöffnete Blatt</span><span class="hint small">immer</span></div>
-          <div id="ki-material" class="ki-material"></div>
-          <button id="ki-attach" class="ki-attach"><svg class="icon" aria-hidden="true"><use href="#i-clip"/></svg>Anhängen · PDF, Foto, Text</button>
-          <input type="file" id="ki-file" accept="application/pdf,.pdf,image/*" multiple class="visually-hidden" aria-label="Material auswählen" tabindex="-1">
-          <p class="hint small">Einmal anhängen, für jedes Blatt per Häkchen wiederverwenden. Bleibt nur auf diesem Gerät; beim Ausfüllen geht es an Google.</p>
-          <p class="beta-note">Beta: KI-Antworten können falsch sein oder danebenliegen – bitte prüfen.</p>
-              <dialog id="ki-setup" class="export-dlg ki-setup" aria-labelledby="ki-setup-title">
-        <form method="dialog" class="export-form">
-          <div class="dlg-head">
-            <h2 id="ki-setup-title">KI einrichten <span class="beta">Beta</span></h2>
-            <button value="cancel" class="icon-btn round ghost" aria-label="Schließen"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
-          </div>
-          <p class="hint">Für die KI-Hilfe brauchst du einen kostenlosen Schlüssel von Google Gemini. Das dauert etwa zwei Minuten.</p>
-          <ol class="ki-steps">
-            <li>Öffne <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> und melde dich mit deinem Google-Konto an.</li>
-            <li>Tippe auf <strong>„Create API key“</strong> (API-Schlüssel erstellen).</li>
-            <li>Kopiere den Schlüssel – er beginnt meist mit „AIza“.</li>
-            <li>Füge ihn hier ein:</li>
-          </ol>
-          <input id="ki-key" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="AIza…" aria-label="Gemini-Schlüssel">
-          <p class="hint small">Der Schlüssel bleibt nur auf diesem Gerät. Blatt und Material gehen beim Ausfüllen direkt an Google, nicht an DeineSchrift. Laut Google ist die Gemini-API ab 18 Jahren. Kostenlos mit Tageslimit.</p>
-          <p class="beta-note">Beta: Es kann zu Fehlern kommen.</p>
-          <p id="ki-setup-status" class="status" aria-live="polite"></p>
-          <div class="dlg-actions">
-            <button type="button" id="ki-delete" class="danger" hidden>Schlüssel löschen</button>
-            <a class="ki-guide-link" href="gemini-schluessel" target="_blank" rel="noopener">Ausführliche Anleitung</a>
-            <button type="button" id="ki-save" class="primary">Speichern &amp; testen</button>
-          </div>
-        </form>
-      </dialog>
-</section>
-        <div class="row needs-sheet">
-          <button id="sheet-draw" aria-pressed="false"><svg class="icon"><use href="#i-plus"/></svg>Textfeld</button>
-          <button id="sheet-reroll"><svg class="icon"><use href="#i-shuffle"/></svg>Neu würfeln</button>
-        </div>
-        <p id="field-none" class="hint" hidden>Tippe auf eine freie Stelle im Blatt für ein neues Feld, oder auf ein Feld, um seinen Text zu ändern. Ziehen verschiebt es, der Punkt unten rechts ändert die Größe.</p>
         <div id="field-editor" class="subcard" hidden>
           <strong id="field-title"></strong>
-          <textarea id="field-text" rows="7" placeholder="Text für dieses Feld …" spellcheck="true" lang="de"></textarea>
+          <textarea id="field-text" rows="4" placeholder="Antwort für dieses Feld …" spellcheck="true" lang="de"></textarea>
           <label class="check"><input type="checkbox" id="field-auto"> Automatisch einpassen</label>
           <label class="slider">Schriftgröße <output id="field-size-out"></output>
             <input type="range" id="field-size" min="1.4" max="6" step="0.05">
           </label>
-          <div class="row ki-field">
-            <button id="field-ki"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>KI-Antwort</button>
-            <button id="field-ki-short">Kürzer</button>
-            <button id="field-ki-new">Neu</button>
-          </div>
-          <div class="row">
+          <div class="row" hidden><!-- Aktionen stehen in der Leiste über dem Feld; die Knöpfe bleiben als Ziel -->
             <button id="field-reroll"><svg class="icon"><use href="#i-shuffle"/></svg>Neu würfeln</button>
             <button id="field-delete" class="danger"><svg class="icon"><use href="#i-trash"/></svg>Feld löschen</button>
           </div>
         </div>
-        <p class="hint small">Tinte, Strichdicke und Stil stellst du unter „Schreiben“ ein. Löschst du ein erkanntes Feld, erscheint der blaue Text wieder.</p>
+        <p id="field-none" class="hint small" hidden>Tippe aufs Blatt, um ein Feld anzulegen.</p>
+        <p id="sheet-status" class="status"></p>
+        <p id="sheet-warn" class="status warn"></p>
+        <details class="ki-card" open>
+          <summary class="ki-card-head">
+            <span class="ki-card-title"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>KI-Hilfe <span class="beta">Beta</span></span>
+            <button id="ki-more" class="icon-btn ghost" aria-label="Gemini-Schlüssel einrichten oder ändern" title="Schlüssel"><svg class="icon" aria-hidden="true"><use href="#i-dots"/></svg></button>
+            <svg class="icon ki-chevron" aria-hidden="true"><use href="#i-down"/></svg>
+          </summary>
+          <button id="ki-fill" class="primary wide"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>Alles ausfüllen</button>
+          <p class="ki-label">Material</p>
+          <div id="ki-material" class="ki-material"></div>
+          <button id="ki-attach" class="ki-attach"><svg class="icon" aria-hidden="true"><use href="#i-clip"/></svg>Anhängen</button>
+          <input type="file" id="ki-file" accept="application/pdf,.pdf,image/*" multiple class="visually-hidden" aria-label="Material auswählen" tabindex="-1">
+        </details>
+        <div class="row needs-sheet">
+          <button id="sheet-draw" aria-pressed="false"><svg class="icon"><use href="#i-plus"/></svg>Textfeld</button>
+          <button id="sheet-reroll"><svg class="icon"><use href="#i-shuffle"/></svg>Neu würfeln</button>
+        </div>
+        <button id="sheet-open" class="wide sheet-open-alt"><svg class="icon"><use href="#i-upload"/></svg>Anderes PDF oder Foto öffnen</button>
+        <input type="file" id="sheet-file" accept="application/pdf,.pdf,image/*" class="visually-hidden" aria-label="PDF oder Foto auswählen" tabindex="-1">
       </div>
       <div class="stage">
         <div id="sheet-empty" class="empty fill-intro">
@@ -500,7 +467,31 @@
           <button id="sheet-share-again" class="primary" hidden><svg class="icon"><use href="#i-share"/></svg>Jetzt teilen</button>
         </div>
       </div>
-    </section>
+          <dialog id="ki-setup" class="export-dlg ki-setup" aria-labelledby="ki-setup-title">
+        <form method="dialog" class="export-form">
+          <div class="dlg-head">
+            <h2 id="ki-setup-title">KI einrichten <span class="beta">Beta</span></h2>
+            <button value="cancel" class="icon-btn round ghost" aria-label="Schließen"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+          </div>
+          <p class="hint">Für die KI-Hilfe brauchst du einen kostenlosen Schlüssel von Google Gemini. Das dauert etwa zwei Minuten.</p>
+          <ol class="ki-steps">
+            <li>Öffne <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> und melde dich mit deinem Google-Konto an.</li>
+            <li>Tippe auf <strong>„Create API key“</strong> (API-Schlüssel erstellen).</li>
+            <li>Kopiere den Schlüssel – er beginnt meist mit „AIza“.</li>
+            <li>Füge ihn hier ein:</li>
+          </ol>
+          <input id="ki-key" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="AIza…" aria-label="Gemini-Schlüssel">
+          <p class="hint small">Der Schlüssel bleibt nur auf diesem Gerät. Blatt und Material gehen beim Ausfüllen direkt an Google, nicht an DeineSchrift. Laut Google ist die Gemini-API ab 18 Jahren. Kostenlos mit Tageslimit.</p>
+          <p class="beta-note">Beta: Es kann zu Fehlern kommen.</p>
+          <p id="ki-setup-status" class="status" aria-live="polite"></p>
+          <div class="dlg-actions">
+            <button type="button" id="ki-delete" class="danger" hidden>Schlüssel löschen</button>
+            <a class="ki-guide-link" href="gemini-schluessel" target="_blank" rel="noopener">Ausführliche Anleitung</a>
+            <button type="button" id="ki-save" class="primary">Speichern &amp; testen</button>
+          </div>
+        </form>
+      </dialog>
+</section>
   </main>
 
   <script src="vendor/jspdf.umd.min.js" defer></script>

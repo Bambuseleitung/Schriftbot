@@ -1,7 +1,7 @@
 // Selbsttest für das Arbeitsblatt: node tests/blatt.test.mjs
 import assert from 'node:assert/strict';
 import { emptyProfile, variantsOf } from '../js/profile.js';
-import { findBlueBlocks, eraseBlue, freeBelow, joinText, detect, layoutField, isBlue, aiFields } from '../js/blatt.js';
+import { findBlueBlocks, eraseBlue, freeBelow, joinText, detect, layoutField, isBlue, aiFields, cleanAnswerText } from '../js/blatt.js';
 
 // Künstliche Seite: 210 × 297 mm bei 4 Pixeln je mm, schwarzer Aufgabentext, blaue Antworten darunter
 const dpmm = 4, W = 210 * dpmm, H = 297 * dpmm;
@@ -114,5 +114,22 @@ console.log(`OK – Arbeitsblatt: ${fields.length} Antworten erkannt, eingepasst
   const wrapped = aiFields({ antworten: [{ page: '1', box_2d: ['800', '100', '850', '600'], text: 'ok' }] }, pages);
   assert.equal(wrapped.length, 1);
   assert.equal(wrapped[0].text, 'ok');
+}
+// KI-Antworten aufräumen
+const NL = String.fromCharCode(10);
+for (const [raw, want] of [
+  ['1. Verwaltung', 'Verwaltung'], ['  2) Herrn Peters ', 'Herrn Peters'], ['a) Ware', 'Ware'], ['- Zucker', 'Zucker'], ['• Licht', 'Licht'],
+  ['Antwort: Betriebsrat', 'Betriebsrat'], ['Lösung 3: zwölf', 'zwölf'], ['**Personalabteilung**', 'Personalabteilung'], ['„Fabrikverkauf“', 'Fabrikverkauf'],
+  ['"Frau Kurz"', 'Frau Kurz'], ['# Überschrift', 'Überschrift'], ['`x`', 'x'], ['$x^2$', 'x^2'], ['1. **Herr** Winter', 'Herr Winter'],
+  ['1. Licht'+NL+'2. Wasser', 'Licht'+NL+'Wasser'], ['12 Mitarbeiter', '12 Mitarbeiter'], ['3,5 Tage', '3,5 Tage'], ['2025 gegründet', '2025 gegründet'],
+  ['Max_Muster', 'Max_Muster'], ['(1) Einkauf', 'Einkauf'],
+]) assert.equal(cleanAnswerText(raw), want, raw);
+assert.equal(aiFields([{ page: 1, box_2d: [100, 100, 150, 600], text: '1. Verwaltung' }], [{ w: 210, h: 297 }])[0].text, 'Verwaltung');
+// Leeres Feld von einem früheren Versuch bekommt die Antwort, gefülltes bleibt unangetastet
+{
+  const pages = [{ w: 210, h: 297 }];
+  const old = [{ id: 'leer', page: 0, x: 21, y: 140, w: 105, h: 9, text: '' }, { id: 'voll', page: 0, x: 21, y: 178, w: 105, h: 9, text: 'eigene Antwort' }];
+  const res = aiFields([{ page: 1, box_2d: [500, 100, 505, 600], text: 'Verwaltung' }, { page: 1, box_2d: [628, 100, 633, 600], text: 'KI' }], pages, old);
+  assert.deepEqual(res, [{ fill: 'leer', text: 'Verwaltung' }]);
 }
 console.log('OK – KI-Felder');

@@ -486,13 +486,16 @@ export function initBlatt(profile) {
   }
   // KI-Antworten als neue Felder anlegen; gibt die Anzahl zurück
   function addAiFields(items) {
-    const add = aiFields(items, sheet.pages, fields).map(f => ({ id: uid(), ...f, auto: true, seed: newSeed() }));
+    const res = aiFields(items, sheet.pages, fields);
+    for (const r of res.filter(r => r.fill)) { const f = fields.find(x => x.id === r.fill); if (f) f.text = r.text; } // leere Felder füllen
+    const add = res.filter(r => !r.fill).map(f => ({ id: uid(), ...f, auto: true, seed: newSeed() }));
     fields.push(...add);
+    if (selected) textEl.value = sel()?.text || '';
     saveFields();
     renderAll();
     syncEditor();
-    const filled = add.filter(f => f.text).length;
-    return { filled, empty: add.length - filled };
+    const filled = res.filter(f => f.text).length;
+    return { filled, empty: add.length - add.filter(f => f.text).length };
   }
   // Scanner über dem Blatt, solange die KI arbeitet (label: Schritt; null: aus)
   const scanEl = $('sheet-scan');

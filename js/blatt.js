@@ -252,15 +252,37 @@ export function aiFields(items, pages, existing = []) {
   const list = Array.isArray(items) ? items : Object.values(items || {}).find(Array.isArray) || [];
   for (const it of list) {
     const pi = Math.round(Number(it?.page ?? 1)) - 1, pg = pages[pi], b = Array.isArray(it?.box_2d) ? it.box_2d.map(Number) : null;
-    const text = String(it?.text ?? '').trim();
+    const text = cleanAnswerText(it?.text);
     if (!pg || !b || b.length !== 4 || !b.every(Number.isFinite)) continue;
     const [y0, x0, y1, x1] = b.map(v => Math.min(1000, Math.max(0, v)) / 1000);
     const flat = (y1 - y0) * pg.h < 9;
     let x = x0 * pg.w, w = (x1 - x0) * pg.w, yb = (flat ? (y0 + y1) / 2 : y1) * pg.h + (flat ? 1 : 0), h = flat ? 9 : (y1 - y0) * pg.h;
     if (w < 12) w = Math.min(60, pg.w - x);
     const f = { page: pi, x, y: Math.max(0, yb - h), w, h: Math.min(h, yb) };
-    if (f.w <= 0 || f.h <= 0 || [...existing, ...out].some(e => e.page === pi && overlap(e, f))) continue;
+    if (f.w <= 0 || f.h <= 0) continue;
+    // Liegt hier schon ein leeres Feld (z. B. von einem früheren Versuch), bekommt es die Antwort; sonst bleibt das vorhandene Feld
+    const hit = existing.find(e => e.page === pi && overlap(e, f));
+    if (hit) { if (text && !String(hit.text ?? '').trim() && !out.some(o => o.fill === hit.id)) out.push({ fill: hit.id, text }); continue; }
+    if (out.some(e => e.page === pi && !e.fill && overlap(e, f))) continue;
     out.push({ ...f, text });
   }
   return out;
+}
+
+// KI-Antwort für ein Feld aufräumen: Nummern und Aufzählungszeichen am Zeilenanfang („1.“, „a)“, „-“, „•“),
+// Vorsätze wie „Antwort:“, Markdown (**fett**, _kursiv_, `Code`, # Überschrift), umschließende Anführungszeichen,
+// Formel-Dollarzeichen und doppelte Leerzeichen. Zeilenumbrüche bleiben.
+export function cleanAnswerText(text) {
+  let t = String(text ?? '').replace(/\r/g, '').replace(/^```\w*\n?|```$/gm, '');
+  t = t.split('\n').map(line => {
+    let l = line.trim();
+    for (let k = 0; k < 3; k++) {
+      l = l.replace(/^(#{1,6}\s+|>\s*|(?:[-–—•*·]|\d{1,3}[.)]|[a-zA-Z][.)]|\(\d{1,3}\)|\([a-zA-Z]\))\s+)/, '')
+        .replace(/^(Antwort|Lösung|Loesung|Answer)\s*\d*\s*:\s*/i, '');
+    }
+    return l.replace(/\*\*(.+?)\*\*|__(.+?)__/g, '$1$2').replace(/(^|\s)[*_](\S[^*_]*?)[*_](?=\s|$|[.,;:!?])/g, '$1$2')
+      .replace(/`([^`]*)`/g, '$1').replace(/\$([^$]+)\$/g, '$1').replace(/\s{2,}/g, ' ');
+  }).filter((l, i, all) => l || (i > 0 && i < all.length - 1)).join('\n').trim();
+  const q = t.match(/^["„“”'‚‘’«»](.*)["“”'‘’«»]$/s);
+  return (q ? q[1] : t).trim();
 }

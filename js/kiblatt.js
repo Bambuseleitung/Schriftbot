@@ -3,21 +3,23 @@
 // es bleibt auf dem Gerät (IndexedDB) und wird per Häkchen für jedes Blatt wiederverwendet.
 import { hasKey, saveKey as saveGeminiKey, forgetKey, generate, textPart, filePart, partsBytes, MAX_BYTES } from './gemini.js';
 import { loadKey, saveKey } from './storage.js';
+import { cleanAnswerText } from './blatt.js';
 import { ask, info, askLongText, choose } from './dialog.js';
 
 const STORE = 'ki-material';
-const RULES = 'Schreibe auf Deutsch, so knapp wie eine Schülerin oder ein Schüler es von Hand täte. Keine Emojis, kein Markdown, keine Aufzählungszeichen mit Sternchen.';
+const RULES = 'Schreibe auf Deutsch, so knapp wie eine Schülerin oder ein Schüler es von Hand täte. Nur der Antworttext selbst: ohne Nummer der Aufgabe, ohne „Antwort:“, ohne Anführungszeichen, ohne Markdown, ohne Emojis.';
 const FILL = 'Du hilfst, ein Arbeitsblatt auszufüllen. Du bekommst die Seiten als Bilder und optional Material. ' +
   'Finde jede freie Stelle, an die eine Antwort geschrieben werden soll: Linien, Lücken in Sätzen (auch mehrere in einer Zeile), Kästen. ' +
   'Gib für jede Stelle einen Eintrag zurück: page (Seitennummer ab 1), box_2d [ymin, xmin, ymax, xmax] der freien Stelle (nicht der Frage), ' +
-  'normiert auf 0 bis 1000 der Seite, und text: die passende Antwort, bei Lückensätzen nur das fehlende Wort oder die fehlenden Wörter. ' +
-  'Nutze das Material. Wenn die Antwort weder auf dem Blatt noch im Material steht (z. B. ein fehlendes Organigramm oder Schaubild), ' +
-  'gib die Stelle trotzdem zurück, mit leerem text. Rate keine Namen oder Zahlen. ' + RULES;
+  'normiert auf 0 bis 1000 der Seite, und text: die Antwort, bei Lückensätzen nur das fehlende Wort oder die fehlenden Wörter, ' +
+  'so dass der Satz grammatisch passt (kein Punkt am Ende, wenn der Satz danach weitergeht). Fülle jede Stelle aus, text ist nie leer. ' +
+  'Nutze vor allem das Material. Steht die Antwort weder auf dem Blatt noch im Material (z. B. ein fehlendes Organigramm), ' +
+  'schreibe die wahrscheinlichste passende Antwort. Bei zwei Lücken in einer Aufgabe gehört in jede Lücke ein eigener Eintrag. ' + RULES;
 // Festes Antwortformat, damit Gemini die Liste nicht anders verpackt
 const SCHEMA = { type: 'ARRAY', items: { type: 'OBJECT', properties: {
   page: { type: 'INTEGER' }, box_2d: { type: 'ARRAY', items: { type: 'INTEGER' } }, text: { type: 'STRING' } }, required: ['page', 'box_2d', 'text'] } };
 const FIELD = 'Du hilfst, eine einzelne Stelle auf einem Arbeitsblatt auszufüllen. Du bekommst die Seite als Bild, die Lage der Stelle ' +
-  '(box_2d: ymin, xmin, ymax, xmax, normiert 0 bis 1000) und optional Material. Antworte nur mit dem Text, der an diese Stelle gehört. Rate keine Namen oder Zahlen: Steht die Antwort weder auf dem Blatt noch im Material, antworte nur mit einem Fragezeichen. ' + RULES;
+  '(box_2d: ymin, xmin, ymax, xmax, normiert 0 bis 1000) und optional Material. Antworte nur mit dem Text, der an diese Stelle gehört. Steht die Antwort weder auf dem Blatt noch im Material, schreibe die wahrscheinlichste passende Antwort. ' + RULES;
 
 const kindOf = mime => (mime === 'application/pdf' ? 'pdf' : mime.startsWith('image/') ? 'image' : 'text');
 const ICON = { pdf: 'i-file', image: 'i-image', text: 'i-clipboard' };
@@ -53,10 +55,6 @@ export function initKiBlatt({ ai, insertIntoField }) {
   let material = [];
 
   // ---------- „NEU“ am Tab, bis man ihn einmal geöffnet hat ----------
-  const NEW_KEY = 'neu-pdf-ki-gesehen';
-  const hideNew = on => { $('tab-new').toggleAttribute('hidden', on); $('tab-new-sr').hidden = on; }; // SVG: Attribut statt .hidden
-  try { hideNew(!!localStorage.getItem(NEW_KEY)); } catch {}
-  $('tab-blatt').addEventListener('click', () => { hideNew(true); try { localStorage.setItem(NEW_KEY, '1'); } catch {} });
 
   // ---------- Material ----------
   const save = () => saveKey(STORE, material).catch(() => info('Das Material konnte nicht gespeichert werden (Speicher voll?).'));
@@ -132,7 +130,7 @@ export function initKiBlatt({ ai, insertIntoField }) {
     dlg.showModal();
   };
   $('ki-key-menu').addEventListener('click', openSetup);
-  $('ki-more').addEventListener('click', openSetup);
+  $('ki-more').addEventListener('click', e => { e.preventDefault(); openSetup(); }); // sitzt in der Überschrift: nicht zuklappen
   $('ki-save').addEventListener('click', async () => {
     const key = keyInput.value.trim(), st = $('ki-setup-status');
     if (!key) { st.textContent = 'Bitte zuerst den Schlüssel einfügen.'; return keyInput.focus(); }
@@ -183,9 +181,9 @@ export function initKiBlatt({ ai, insertIntoField }) {
     const { filled, empty } = ai.addAiFields(items);
     if (!filled && !empty) return 'Gemini hat keine freie Stelle erkannt. Tippe auf eine Stelle und nutze „KI-Antwort“.';
     const n = (k, one, many) => `${k} ${k === 1 ? one : many}`;
-    return [filled && `${n(filled, 'Antwort', 'Antworten')} eingetragen`,
-      empty && `${n(empty, 'Stelle', 'Stellen')} leer – die Antwort steht nicht auf dem Blatt. Häng das passende Material an (z. B. ein Organigramm) und tippe auf das Feld → „KI-Antwort“`]
-      .filter(Boolean).join(' · ') + ' (Beta, bitte prüfen).';
+    const tip = material.some(m => m.on) ? '' : ' Tipp: Häng fehlendes Material (z. B. ein Organigramm) an, dann stimmen die Antworten.';
+    return [filled && `${n(filled, 'Antwort', 'Antworten')} eingetragen`, empty && `${n(empty, 'Feld', 'Felder')} leer`]
+      .filter(Boolean).join(' · ') + ' – bitte prüfen.' + tip;
   }));
   const field = how => run('Gemini schreibt die Antwort …', async signal => {
     const f = ai.selectedBox();
@@ -194,12 +192,12 @@ export function initKiBlatt({ ai, insertIntoField }) {
     const task = how === 'kuerzer' ? `Kürze die bisherige Antwort deutlich: „${f.text}“`
       : how === 'neu' ? `Schreibe eine andere Antwort als bisher${f.text.trim() ? `: „${f.text}“` : '.'}` : 'Schreibe die Antwort.';
     const parts = [...await sheetParts(f.page), ...materialParts(), textPart(`Stelle: Seite ${f.page}, box_2d ${JSON.stringify(f.box_2d)}. ${task}`)];
-    const out = await generate({ system: FIELD, parts, temperature: how === 'neu' ? 0.9 : 0.4, signal });
-    if (/^\?+$/.test(out.trim())) throw new Error('Die Antwort steht weder auf dem Blatt noch im Material. Häng das passende Material an (z. B. ein Organigramm) und versuch es noch einmal.');
+    const out = cleanAnswerText(await generate({ system: FIELD, parts, temperature: how === 'neu' ? 0.9 : 0.4, signal }));
+    if (!out) throw new Error('Die KI hat keinen Text geliefert. Versuch es noch einmal.');
     insertIntoField(out);
     return 'Antwort eingetragen (Beta) – bitte prüfen.';
   });
-  for (const [id, how] of [['field-ki', 'antwort'], ['fb-ki', 'antwort'], ['field-ki-short', 'kuerzer'], ['fb-short', 'kuerzer'], ['field-ki-new', 'neu'], ['fb-new', 'neu']]) {
+  for (const [id, how] of [['fb-ki', 'antwort'], ['fb-short', 'kuerzer'], ['fb-new', 'neu']]) {
     $(id).addEventListener('click', () => field(how));
   }
 }

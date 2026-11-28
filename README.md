@@ -177,7 +177,7 @@ Deine Handschriften liegen nur im Speicher von Safari auf diesem iPad. Wird die 
 ## 5. Updates einspielen
 
 1. Geänderte Dateien in GitHub hochladen (gleiche Stelle, überschreiben).
-2. In `sw.js` die Zeile `const VERSION = 'v55';` hochzählen (z. B. auf `'v56'`). **Ohne diesen Schritt sieht das iPad die alten Dateien.**
+2. In `sw.js` die Zeile `const VERSION = 'v56';` hochzählen (z. B. auf `'v57'`). **Ohne diesen Schritt sieht das iPad die alten Dateien.**
 3. App auf dem iPad öffnen. Nach ein paar Sekunden erscheint „Eine neue Version ist bereit“ → **Neu laden**.
 
 ## 6. Probleme lösen
