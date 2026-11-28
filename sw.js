@@ -1,5 +1,5 @@
 // Bei jeder Änderung an den Dateien VERSION hochzählen, sonst sieht das iPad die alte Version.
-const VERSION = 'v52';
+const VERSION = 'v53';
 const CACHE = 'handschrift-' + VERSION;
 const FILES = [
   './',
@@ -19,6 +19,8 @@ const FILES = [
   'js/schriften.js',
   'js/vorschau.js',
   'js/vorschau-daten.js',
+  'js/gemini.js',
+  'js/kiblatt.js',
   'js/tutorial.js',
   'js/aufnahme.js',
   'js/export.js',
@@ -60,7 +62,7 @@ self.addEventListener('activate', e => {
 
 // Erst bei Bedarf geladen und dann für offline gemerkt: pdf.js (3 MB, nur fürs Blatt) und die Seiten
 // Anleitung/Datenschutz. Die Demo-Schrift kommt immer frisch, wenn online (sie wird nur beim ersten Start gebraucht).
-const LAZY = /\/(vendor\/pdfjs\/|anleitung(\.html)?$|datenschutz(\.html)?$|impressum(\.html)?$|css\/seite\.css$|icons\/|schriften\/)/;
+const LAZY = /\/(vendor\/pdfjs\/|anleitung(\.html)?$|datenschutz(\.html)?$|impressum(\.html)?$|gemini-schluessel(\.html)?$|css\/seite\.css$|icons\/|schriften\/)/;
 const FRESH = /\/demo\//;
 
 // Cache zuerst, damit die App offline sofort startet.

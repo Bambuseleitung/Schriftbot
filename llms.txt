@@ -13,6 +13,7 @@ Wichtige Fakten:
 - Vorlagen: Brief, Notizen, To-do, Grußkarte, Entschuldigung
 - Schreib-Animation: die Seite schreibt sich in etwa 1,5 Sekunden selbst hin
 - PDFs und Arbeitsblätter ausfüllen: auf eine Stelle tippen und Text eintippen, oder blau getippten Text im PDF automatisch ersetzen lassen
+- KI-Hilfe beim Ausfüllen (Beta, mit eigenem kostenlosem Google-Gemini-Schlüssel): „Alles ausfüllen“ oder Antwort je Feld; Material (PDF, Fotos, Text) einmal anhängen und wiederverwenden; Daten gehen dabei direkt an Google
 - Export: PDF (A4, Vektor), PNG mit 300 dpi (auch durchsichtig), GoodNotes-Datei (.goodnotes) mit echten, radierbaren Strichen
 - Geräte: iPad (empfohlen, Safari mit Apple Pencil), iPhone, Android, Windows, Mac; Oberfläche auf Deutsch
 - Gedacht für eigene Texte (Notizen, Lernzettel, Briefe, Karten, Formulare), nicht als Ersatz für verlangte eigenhändige Handschrift oder Unterschriften
@@ -34,6 +35,7 @@ English summary: DeineSchrift is a free text to handwriting converter that runs 
 - [Handschrift am iPad](https://deineschrift.de/handschrift-ipad): getippten Text handschriftlich für GoodNotes und Notability
 - [Schriftbot-Alternative](https://deineschrift.de/schriftbot-alternative): fairer Vergleich DeineSchrift und Schriftbot
 - [Text to handwriting (English)](https://deineschrift.de/en/text-to-handwriting): English explanation of the free text to handwriting converter
+- [Gemini-Schlüssel für die KI-Hilfe](https://deineschrift.de/gemini-schluessel): kostenlosen Schlüssel holen, Datenschutz, Material
 - [Anleitung und häufige Fragen](https://deineschrift.de/anleitung): Schritt-für-Schritt-Anleitung, FAQ
 - [Datenschutz und Lizenzen](https://deineschrift.de/datenschutz): welche Daten anfallen, verwendete Open-Source-Bibliotheken
 

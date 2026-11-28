@@ -1,7 +1,7 @@
 // Selbsttest für das Arbeitsblatt: node tests/blatt.test.mjs
 import assert from 'node:assert/strict';
 import { emptyProfile, variantsOf } from '../js/profile.js';
-import { findBlueBlocks, eraseBlue, freeBelow, joinText, detect, layoutField, isBlue } from '../js/blatt.js';
+import { findBlueBlocks, eraseBlue, freeBelow, joinText, detect, layoutField, isBlue, aiFields } from '../js/blatt.js';
 
 // Künstliche Seite: 210 × 297 mm bei 4 Pixeln je mm, schwarzer Aufgabentext, blaue Antworten darunter
 const dpmm = 4, W = 210 * dpmm, H = 297 * dpmm;
@@ -92,3 +92,22 @@ const t = detect(tight, dpmm).fields[0];
 assert.ok(t.y >= 240, `Feld beginnt bei ${t.y} mm, unter der Frage (240 mm)`);
 img.data = saved;
 console.log(`OK – Arbeitsblatt: ${fields.length} Antworten erkannt, eingepasst auf x-Höhe ${fit.xHeight} mm`);
+
+// KI-Antworten → Felder: Umrechnung in mm, Linie wird zum Feld darüber, Überdeckung und Unsinn entfallen
+{
+  const pages = [{ w: 210, h: 297 }];
+  const out = aiFields([
+    { page: 1, box_2d: [500, 100, 505, 600], text: 'Zucker' },        // nur eine Linie
+    { page: 1, box_2d: [600, 100, 650, 600], text: 'Sauerstoff' },
+    { page: 1, box_2d: [601, 110, 640, 590], text: 'doppelt' },       // überdeckt die vorige
+    { page: 2, box_2d: [0, 0, 10, 10], text: 'falsche Seite' },
+    { page: 1, box_2d: [1, 2], text: 'kaputt' }, { page: 1, box_2d: [700, 100, 750, 600], text: ' ' },
+  ], pages, []);
+  assert.equal(out.length, 2);
+  assert.equal(out[0].text, 'Zucker');
+  assert.ok(Math.abs(out[0].x - 21) < 1e-9 && Math.abs(out[0].w - 105) < 1e-9, 'x und Breite in mm');
+  assert.ok(Math.abs(out[0].y + out[0].h - (297 * 0.5025 + 1)) < 1e-9 && out[0].h === 9, 'flache Stelle: Feld steht auf der Linie, 9 mm hoch');
+  assert.equal(aiFields([{ page: 1, box_2d: [600, 100, 650, 600], text: 'x' }], pages, [{ page: 0, ...out[1] }]).length, 0, 'vorhandenes Feld bleibt');
+  assert.deepEqual(aiFields('kein Array', pages), []);
+}
+console.log('OK – KI-Felder');

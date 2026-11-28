@@ -1,6 +1,6 @@
 // Modul 4: Arbeitsblatt. PDF oder Foto öffnen, blaue Antworten werden erkannt, vom Blatt entfernt und
 // an derselben Stelle in Handschrift gesetzt. Felder lassen sich verschieben, in der Größe ziehen und neu aufziehen.
-import { detect, layoutField, eraseBlue } from './blatt.js';
+import { detect, layoutField, eraseBlue, aiFields } from './blatt.js';
 import { importFile } from './pdfimport.js';
 import { current, options, inkColor } from './schreiben.js';
 import { drawPage } from './render.js';
@@ -438,5 +438,39 @@ export function initBlatt(profile) {
     return true;
   }
   const selectedField = () => { const f = sel(); return f ? { number: fields.indexOf(f) + 1, page: f.page + 1, text: f.text || '' } : null; };
-  return { render: () => { cache.clear(); renderAll(); syncEditor(); }, insertIntoField, selectedField };
+  // ---------- Für die KI (kiblatt.js) ----------
+  // Seiten als JPEG (Base64), längste Seite höchstens 1600 px – reicht zum Lesen und hält die Anfrage klein
+  async function pageImages() {
+    return Promise.all(clean.map(async c => {
+      const k = Math.min(1, 1600 / Math.max(c.width, c.height));
+      const t = document.createElement('canvas');
+      t.width = Math.round(c.width * k);
+      t.height = Math.round(c.height * k);
+      const ctx = t.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, t.width, t.height);
+      ctx.drawImage(c, 0, 0, t.width, t.height);
+      const url = t.toDataURL('image/jpeg', 0.82);
+      t.width = t.height = 0;
+      return url.slice(url.indexOf(',') + 1);
+    }));
+  }
+  // KI-Antworten als neue Felder anlegen; gibt die Anzahl zurück
+  function addAiFields(items) {
+    const add = aiFields(items, sheet.pages, fields).map(f => ({ id: uid(), ...f, auto: true, seed: newSeed() }));
+    fields.push(...add);
+    saveFields();
+    renderAll();
+    syncEditor();
+    return add.length;
+  }
+  // Gewähltes Feld als Stelle für die KI: Seite ab 1, box_2d 0–1000, bisheriger Text
+  function selectedBox() {
+    const f = sel();
+    if (!f) return null;
+    const pg = sheet.pages[f.page], n = v => Math.round(v * 1000);
+    return { page: f.page + 1, box_2d: [n(f.y / pg.h), n(f.x / pg.w), n((f.y + f.h) / pg.h), n((f.x + f.w) / pg.w)], text: f.text || '' };
+  }
+  const ai = { hasSheet: () => !!sheet, sheetName: () => sheet?.name || '', pageImages, addAiFields, selectedBox, setBusy, status: t => { statusEl.textContent = t; } };
+  return { render: () => { cache.clear(); renderAll(); syncEditor(); }, insertIntoField, selectedField, ai };
 }

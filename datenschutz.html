@@ -22,7 +22,7 @@
   <main>
     <nav class="crumbs" aria-label="Pfad"><a href="./">DeineSchrift</a> › Datenschutz &amp; Lizenzen</nav>
     <h1>Datenschutz &amp; Lizenzen</h1>
-    <p class="lead">Kurz gesagt: DeineSchrift speichert deine Handschrift, deine Texte und deine Dateien nur auf deinem Gerät. Es gibt keine Anmeldung, keine Cookies und kein Tracking.</p>
+    <p class="lead">Kurz gesagt: DeineSchrift speichert deine Handschrift, deine Texte und deine Dateien nur auf deinem Gerät. Es gibt keine Anmeldung, keine Cookies und kein Tracking. Nur wenn du selbst die KI-Hilfe mit deinem eigenen Gemini-Schlüssel nutzt, gehen Blatt und Material direkt an Google.</p>
     <p class="stand">Stand: 28. November 2026</p>
 
     <h2 id="verantwortlich">Wer ist verantwortlich?</h2>
@@ -34,7 +34,7 @@
 
     <h2 id="geraet">Was speichert DeineSchrift auf meinem Gerät?</h2>
     <ul>
-      <li><strong>Deine Handschriften und Einstellungen</strong> im Speicher deines Browsers (IndexedDB und localStorage).</li>
+      <li><strong>Deine Handschriften und Einstellungen</strong>, falls eingerichtet auch dein Gemini-Schlüssel und angehängtes KI-Material, im Speicher deines Browsers (IndexedDB und localStorage).</li>
       <li><strong>Geöffnete Formulare, PDFs und Fotos</strong> werden direkt im Browser verarbeitet und nur lokal zwischengespeichert, damit sie nach einem Neustart noch da sind.</li>
       <li><strong>Die App-Dateien</strong> legt ein Service Worker im Browser ab, damit DeineSchrift offline startet.</li>
     </ul>
@@ -42,6 +42,10 @@
 
     <h2 id="cookies">Verwendet DeineSchrift Cookies oder Tracking?</h2>
     <p>Nein. Es gibt keine Cookies, keine Analyse-Werkzeuge und keine eingebundenen Inhalte anderer Anbieter wie Schriften, Videos oder Karten. Alle benötigten Programmteile liegen auf derselben Seite.</p>
+
+    <h2 id="ki">Was passiert bei der KI-Hilfe (Beta)?</h2>
+    <p>Die KI-Hilfe beim „PDF ausfüllen“ ist freiwillig und nur aktiv, wenn du einen eigenen Schlüssel für die Gemini-API von Google eingibst. Tippst du auf „Alles ausfüllen“ oder „KI-Antwort“, schickt dein Browser die Seiten des geöffneten Blatts, das angehakte Material (PDFs, Fotos, Texte) und deinen Schlüssel direkt an Google (Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA; in der EU Google Ireland Ltd., Gordon House, Barrow Street, Dublin 4, Irland). Der Betreiber von DeineSchrift erhält diese Daten nicht. Du nutzt die Gemini-API mit deinem eigenen Google-Konto; es gelten die <a href="https://ai.google.dev/gemini-api/terms">Nutzungsbedingungen der Gemini-API</a> und die <a href="https://policies.google.com/privacy">Datenschutzerklärung von Google</a>. Google kann Daten in den USA verarbeiten. Schicke keine sensiblen oder persönlichen Daten mit.</p>
+    <p>Schlüssel und Material liegen nur im Speicher deines Browsers, werden nicht in Sicherungsdateien übernommen und lassen sich jederzeit löschen (Schlüssel über das ?-Menü, Material über das ✕ in der Liste). Anleitung: <a href="gemini-schluessel">Kostenlosen Gemini-Schlüssel holen</a>.</p>
 
     <h2 id="demo">Was sind die mitgelieferten Schriften?</h2>
     <p>Beim ersten Öffnen lädt DeineSchrift – falls vorhanden – eine mitgelieferte Beispiel-Handschrift von derselben Seite, damit du die App sofort ausprobieren kannst. Weitere mitgelieferte Schriften lädt die App erst, wenn du sie unter „Schrift“ auswählst, ebenfalls von derselben Seite. Dabei werden keine Daten von dir übertragen.</p>

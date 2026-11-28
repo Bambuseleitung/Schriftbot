@@ -7,6 +7,7 @@ import { initTextAufnahme } from './textaufnahme.js';
 import { initProfil } from './profil.js';
 import { initSchreiben } from './schreiben.js';
 import { initBlatt } from './blattui.js';
+import { initKiBlatt } from './kiblatt.js';
 import { initProfilwahl } from './profilwahl.js';
 import { info } from './dialog.js';
 import { cleanPasted } from './einfuegen.js';
@@ -123,6 +124,7 @@ initProfil(own);
 // Früher gab es eine KI mit API-Schlüssel: einen gespeicherten Schlüssel vom Gerät löschen.
 try { localStorage.removeItem('ki'); } catch {}
 const blatt = initBlatt(profile);
+initKiBlatt({ ai: blatt.ai, insertIntoField: t => blatt.insertIntoField(t) });
 // Schrift zum Schreiben wechseln (sofort, ohne Neuladen); das Aussehen bleibt
 async function chooseFont(id) {
   setActiveProfile(id);

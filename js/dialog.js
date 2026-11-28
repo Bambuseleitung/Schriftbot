@@ -63,6 +63,18 @@ export function askText(title, value = '', { ok = 'Speichern', placeholder = '' 
 }
 
 // Mehrere Möglichkeiten; gibt den Wert der gewählten oder null zurück. choices: [{ label, value, primary?, danger? }]
+// Längerer Text (mehrere Zeilen), z. B. als Material für die KI. Gibt { name, text } oder null zurück.
+export function askLongText(title, { ok = 'Hinzufügen', placeholder = '' } = {}) {
+  return sheet((box, done) => {
+    const name = el('input', { type: 'text', placeholder: 'Name, z. B. Notizen Photosynthese' });
+    const area = el('textarea', { rows: 8, placeholder });
+    area.setAttribute('aria-label', 'Text');
+    const go = () => (area.value.trim() ? done({ name: name.value.trim() || 'Eingefügter Text', text: area.value.trim() }) : area.focus());
+    box.append(el('h2', { textContent: title }), name, area, el('div', { className: 'row' },
+      btn(ok, 'primary', go), btn('Abbrechen', '', () => done(null))));
+  });
+}
+
 export function choose(message, choices, { title = '', preview = '' } = {}) {
   return sheet((box, done) => {
     if (title) box.append(el('h2', { textContent: title }));

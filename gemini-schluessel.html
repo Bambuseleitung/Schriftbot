@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <script>/* Nur eine Adresse: www leitet auf die Hauptadresse um (sonst getrennte Speicher für Schrift und Einstellungen) */
+    if (location.hostname === 'www.deineschrift.de') location.replace('https://deineschrift.de' + location.pathname + location.search + location.hash);</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kostenlosen Gemini-Schlüssel holen – KI in DeineSchrift</title>
+  <meta name="description" content="So holst du dir in zwei Minuten einen kostenlosen Gemini-API-Schlüssel von Google und lässt Arbeitsblätter und PDFs mit KI in deiner Handschrift ausfüllen. Beta.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://deineschrift.de/gemini-schluessel">
+  <meta name="theme-color" content="#ffffff">
+  <script>try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}</script>
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/seite.css">
+</head>
+<body>
+  <header class="top">
+    <a class="logo" href="./"><svg class="logo-hw" viewBox="0 0 115.4 20.5" role="img" aria-label="DeineSchrift"><path d="M3.9 1.9L3.6 2.2L3.9 1.9L3.6 2.2L3.5 3.3L3.5 6.9L3.2 9.5L3 17.8L3.1 18L3 17.8L3.1 18L3.3 17.8L3.4 17.1M4.7 2.3L4.4 2.1L5.4 2.1L7.2 2.6L8.4 3.3L9.1 4.4L10.1 6.5L10.5 7.8L10.6 11.7L10.2 12.9L9.5 14.2L7.8 16.3L6.5 17.5L4.4 18.3L2.1 18.3L2.5 18.3L1.9 18.2L1.5 17.9M14.2 14.2L14.5 13.8L14.2 14.2L14.5 13.8L17.4 13.8L18.8 13.2L18.5 13.3L19.4 12.3L19.2 12.5L19.4 11.2L18.5 10.1L17.9 9.9L16.7 9.9L16.2 10.1L15.2 11.1L14.2 12.7L14.5 12.5L14.2 12.7L13.4 15L13.5 17.1L13.9 17.6L15.1 18.2L15.8 18.3L20.4 17.9L20.9 17.4M24.2 11.2L24 11.6L24 12.5L24.1 11.4L24 12.7L24.5 14.8L24.5 16.5M23.1 8.7L22.8 7.5L22.8 7L23 8.3L22.8 6.9M27.3 11.2L27.4 10.6L27.3 15.2L27.9 16.9L27.9 18.3L27.9 16.7L29.2 12.3L29.7 11.4L30.5 10.7L30.3 11L31.1 10.5L32.5 10.2L33.9 10.1L34.4 10.4L34.8 10.9L35 13.7L34.7 16.9L34.9 17.1M39.7 13.2L39.8 13.4L40.1 13.5L41.6 13.6L41.1 13.5L42.1 13.4L43.7 12.7L44.2 12.2L44.7 11.2L44.8 9.6L44.4 9.1L44.6 9.2L43.7 8.8L42.5 8.8L41.7 9.2L40.3 10.4L39 12L38.4 12.9L37.8 15.2L37.8 15.9L37.8 15.2L37.8 15.9L38.2 17.1L39.2 18L41.6 18.3L44.1 17.8L42.8 18.1L46.6 16.9L47.5 16.5M61.7 4L61.4 3.2L60.9 2.6L59.2 1.8L57.8 1.8L56.9 2L55.9 2.4L55.4 2.9L54 5.2L53.7 6.2L53.7 7.3L53.7 7L54 7.7L54.2 7.8L53.9 7.5L54.8 8.3L58.5 8.8L59.5 9.4L59.7 10L59.5 9.7L59.7 10L59.7 11.5L59.2 13.5L58.8 14.6L58 15.6L55.7 17.5L54.3 18.2L53 18.3L52.5 18.2L50.5 16.9L50.3 16.4M70.2 10.4L70.2 8.3L69.8 8L69.2 7.7L69.3 7.8L68.1 7.7L66.8 8.4L64.2 10.8L63.6 11.7L62.9 13.4L63 16L63 15.7L63.5 16.8L64.7 17.7L66.8 18.3L66.5 18.2L67.9 18.3L68.6 18.1L69.2 17.6L70.5 16.2L71.5 14.9M74.3 1.5L74.3 2.7L74.8 5.4L74.9 7.5L74.8 7L74.9 11.1L74.6 13.6L74.7 13.3L74.6 15.9L74.6 14.8L74.9 12.7L75.7 10.5L76.4 9.4L78.3 7.5L79.2 7L80 7L80.8 7.7L81.6 10.5L82.1 13.3L82.2 16.6M85.9 9.7L86.3 11.7L86.5 17.7L86.7 18.3L86.5 17.1L85 12.8L85.2 13.3L84.9 11.4L85.3 10.6L86.6 9.4L88 8.5L90.1 7.8L89.7 7.9L90.5 7.7L92 7.7L92.7 8M95.7 13.1L95.6 18.3L95.8 17.5M95.7 8.6L95.7 8.1L95.6 7.8L95.7 8.2L95.6 7.8L95.5 8M106 5.3L106 5L105.8 4.9L106 5.2L106 5L105.7 4.7L104.8 4.8L103.5 5.8L101.9 8L101.3 11.2L101.5 15.4L101.4 19M98.5 11.8L99.1 12L102.4 12L103.9 11.5M109.7 7.7L109.8 7.5L109.7 7.7L109.8 7.5L109.9 7.5L110.1 9.8L110.1 14.4L109.8 16.3L109.8 18L110 18.3M107.3 10.7L107.1 11.1L107.2 10.8L107.1 11.1L107.6 11.4L109.6 11.4L109.1 11.4L110.4 11.3L113.9 10.1" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a class="cta" href="./">DeineSchrift öffnen</a>
+  </header>
+
+  <main>
+    <nav class="crumbs" aria-label="Pfad"><a href="./">DeineSchrift</a> › KI-Schlüssel</nav>
+    <h1>Kostenlosen Gemini-Schlüssel holen</h1>
+    <p class="lead">Mit einem eigenen Schlüssel von Google Gemini hilft dir die KI beim „PDF ausfüllen“: Sie findet die Fragen auf deinem Arbeitsblatt und schreibt die Antworten direkt in Handschrift an die richtige Stelle. Der Schlüssel ist kostenlos und in etwa zwei Minuten eingerichtet.</p>
+    <p class="stand"><strong>Beta:</strong> Die KI-Hilfe ist neu. Es kann zu Fehlern kommen – bitte prüfe jedes Ergebnis, bevor du es benutzt.</p>
+
+    <h2 id="schritte">So geht’s</h2>
+    <ol class="schritte">
+      <li><strong>Google AI Studio öffnen.</strong> Gehe auf <a href="https://aistudio.google.com/apikey">aistudio.google.com/apikey</a> und melde dich mit deinem Google-Konto an. Beim ersten Mal bestätigst du die Nutzungsbedingungen von Google.</li>
+      <li><strong>Schlüssel erstellen.</strong> Tippe auf „Create API key“ (API-Schlüssel erstellen). Falls Google nach einem Projekt fragt, nimm das vorgeschlagene oder lege ein neues an.</li>
+      <li><strong>Schlüssel kopieren.</strong> Der Schlüssel ist eine lange Zeichenfolge, die meist mit „AIza“ beginnt. Tippe auf „Kopieren“.</li>
+      <li><strong>In DeineSchrift einfügen.</strong> Öffne <a href="./">DeineSchrift</a>, öffne unter „PDF ausfüllen“ ein Blatt, tippe bei „KI-Hilfe“ auf <strong>Alles ausfüllen</strong> (oder im ?-Menü auf „KI-Schlüssel“) und füge den Schlüssel ein. Mit „Speichern &amp; testen“ prüft DeineSchrift ihn einmal bei Google.</li>
+      <li><strong>Loslegen.</strong> „Alles ausfüllen“ füllt das ganze Blatt; für ein einzelnes Feld tippst du es an und wählst „KI-Antwort“, „Kürzer“ oder „Neu“. Buchseiten, Fotos oder Notizen hängst du einmal als Material an und nutzt sie per Häkchen für jedes Blatt.</li>
+    </ol>
+    <p>Du brauchst keine Kreditkarte und musst keine Abrechnung einrichten. Richte auch keine ein – solange keine Abrechnung hinterlegt ist, kann der Schlüssel nichts kosten.</p>
+
+    <h2 id="kosten">Kostet das etwas?</h2>
+    <p>Nein. Google bietet für die Gemini-API ein kostenloses Kontingent mit einem Tageslimit. Wie hoch es ist, legt Google fest und ändert es von Zeit zu Zeit; deine aktuellen Grenzen siehst du in Google AI Studio. Ist das Limit erreicht, zeigt DeineSchrift einen Hinweis – am nächsten Tag geht es weiter.</p>
+
+    <h2 id="daten">Was passiert mit meinen Texten?</h2>
+    <p>Wenn du die KI-Hilfe nutzt, schickt dein Gerät die Seiten des geöffneten Blatts und das angehakte Material direkt an Google. DeineSchrift selbst bekommt davon nichts mit – es gibt keinen Server dazwischen. Für die Verarbeitung gelten die <a href="https://ai.google.dev/gemini-api/terms">Nutzungsbedingungen der Gemini-API</a> und die <a href="https://policies.google.com/privacy">Datenschutzerklärung von Google</a>. Gib keine sensiblen oder persönlichen Daten ein, die Google nicht sehen soll.</p>
+
+    <h2 id="alter">Ab welchem Alter?</h2>
+    <p>Laut den Bedingungen von Google ist die Gemini-API für Personen ab 18 Jahren. Das Ausfüllen von Hand funktioniert auch ohne KI.</p>
+
+    <h2 id="speicher">Wo liegt mein Schlüssel?</h2>
+    <p>Nur auf deinem Gerät, im Speicher des Browsers. Er wandert nicht in Sicherungsdateien und wird nicht geteilt. Löschen kannst du ihn jederzeit über das <strong>?</strong>-Menü → „KI-Schlüssel (Gemini)“ → „Schlüssel löschen“. Glaubst du, jemand anderes kennt deinen Schlüssel, lösche ihn außerdem in Google AI Studio und erstelle einen neuen.</p>
+
+    <h2 id="material">Wie funktioniert das Material?</h2>
+    <p>Das geöffnete Arbeitsblatt geht immer automatisch mit. Weitere Hilfen – Buchseiten als PDF, Fotos von der Tafel oder eingefügte Notizen – hängst du unter „Anhängen“ einmal an. Sie bleiben auf deinem Gerät gespeichert, bis du sie löschst, und per Häkchen entscheidest du für jedes Blatt, was mitgeht. Zusammen dürfen Blatt und Material etwa 15 MB groß sein.</p>
+
+    <h2 id="fehler">Es klappt nicht – was tun?</h2>
+    <ul>
+      <li><strong>„Der Schlüssel ist ungültig“:</strong> Kopiere ihn noch einmal vollständig aus Google AI Studio.</li>
+      <li><strong>„Tageslimit erreicht“:</strong> Warte bis morgen.</li>
+      <li><strong>„Keine Verbindung“:</strong> Die KI braucht Internet; der Rest von DeineSchrift funktioniert auch offline.</li>
+      <li><strong>Antwort an falscher Stelle:</strong> Feld antippen und verschieben, oder löschen und an der richtigen Stelle neu antippen – dann „KI-Antwort“.</li>
+      <li><strong>Rote Kästchen im Text:</strong> Die KI hat ein Zeichen benutzt, das in deiner Handschrift fehlt. Ändere es im Feld oder nimm es unter „Eigene Schrift“ auf.</li>
+    </ul>
+  </main>
+
+  <footer>
+    <a href="./">DeineSchrift öffnen</a>
+    <a href="handschrift-generator">Handschrift-Generator</a>
+    <a href="goodnotes-handschrift">Handschrift für GoodNotes</a>
+    <a href="eigene-handschrift-digitalisieren">Eigene Handschrift digitalisieren</a>
+    <a href="text-in-schreibschrift">Text in Schreibschrift</a>
+    <a href="handschriftlicher-brief">Brief &amp; Karte in Handschrift</a>
+    <a href="handschrift-schriftart">Handschrift als Schriftart</a>
+    <a href="handschrift-ipad">Handschrift am iPad</a>
+    <a href="schriftbot-alternative">Schriftbot-Alternative</a>
+    <a href="en/text-to-handwriting">English: Text to handwriting</a>
+    <a href="anleitung">Anleitung &amp; häufige Fragen</a>
+    <a href="datenschutz">Datenschutz &amp; Lizenzen</a>
+    <a href="impressum">Impressum</a>
+  </footer>
+</body>
+</html>

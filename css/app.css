@@ -1145,3 +1145,43 @@ select:not([multiple]) { background-image: var(--chev) !important; background-re
 @media (max-width: 700px) { #text-recorder .recorder-head { flex-wrap: wrap; row-gap: 6px; } #text-recorder .recorder-head .text-info { min-width: 0; } }
 .text-zoom { display: flex; align-items: center; gap: 2px; }
 .text-zoom-val { min-width: 3.6em; text-align: center; font-size: 0.882rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* „NEU“ handgeschrieben über „PDF ausfüllen“ (bis zum ersten Öffnen) */
+.tab-new { position: absolute; top: 6px; right: -16px; width: 26px; height: 14px; transform: rotate(-9deg); pointer-events: none; }
+.tab-new path { fill: none; stroke: #2f7fd8; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.tab-new[hidden] { display: none; }
+@media (max-width: 1000px) { .tab-new { top: 4px; right: -12px; } }
+@media (max-width: 700px) { .tab-new { top: 2px; right: 14%; width: 22px; height: 12px; } }
+
+/* KI-Hilfe beim Ausfüllen (Beta) */
+.beta { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 0.647rem; font-weight: 600; line-height: 1.5; vertical-align: 1px;
+  background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+.beta-note { margin: 4px 0 0; padding: 6px 10px; border-radius: 10px; font-size: 0.765rem; line-height: 1.45;
+  background: color-mix(in srgb, var(--warn) 12%, transparent); color: var(--ink); }
+.ki-card { display: grid; gap: 8px; margin: 12px 0; padding: 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border-strong); }
+.view-blatt:not(.has-sheet) .ki-card { display: none; }
+.ki-card-head { display: flex; align-items: center; justify-content: space-between; }
+.ki-card h3 { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 0.941rem; }
+.ki-card h3 .icon { width: 18px; height: 18px; color: var(--accent); }
+.ki-card .hint { margin: 0; }
+.ki-label { margin: 4px 0 -2px; font-size: 0.765rem; color: var(--muted); }
+.ki-material { display: grid; gap: 5px; }
+.ki-material:empty { display: none; }
+.ki-mat { display: flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 4px 0 10px; border-radius: 10px; background: var(--panel); border: 1px solid var(--border); font-size: 0.824rem; }
+.ki-mat-fixed { justify-content: space-between; padding-right: 10px; background: var(--surface-2); }
+.ki-mat label, .ki-mat-fixed > span:first-child { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.ki-mat input { width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
+.ki-mat .icon { width: 16px; height: 16px; flex: none; color: var(--muted); }
+.ki-mat-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ki-mat .icon-btn { min-width: 36px; min-height: 36px; }
+.ki-attach { min-height: 40px; border: 1px dashed var(--border-strong); background: transparent; color: var(--accent); font-size: 0.824rem; }
+.ki-attach .icon { width: 16px; height: 16px; }
+.ki-field button { flex: 1 1 auto; }
+#field-ki { color: var(--accent); }
+.ki-steps { margin: 4px 0; padding-left: 22px; display: grid; gap: 6px; font-size: 0.882rem; line-height: 1.45; }
+#ki-key { width: 100%; min-height: 44px; font-family: ui-monospace, monospace; }
+.ki-setup .dlg-actions { flex-wrap: wrap; }
+.ki-guide-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: var(--accent); }
+#ki-setup-status:empty { display: none; }
+.sheet textarea { width: 100%; min-height: 160px; margin: 8px 0; }
+.sheet input[type="text"] { width: 100%; }

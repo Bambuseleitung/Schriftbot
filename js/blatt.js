@@ -237,3 +237,27 @@ export function detect(img, dpmm, items = []) {
   });
   return { fields, clean };
 }
+
+// KI-Antworten in Felder umrechnen. items: [{ page (ab 1), box_2d: [ymin, xmin, ymax, xmax] 0–1000, text }],
+// pages: [{ w, h }] in mm, existing: vorhandene Felder. Stellen, die ein vorhandenes Feld überdecken, entfallen.
+// Ist die Stelle flach (unter 9 mm, meist nur die Linie), steht das Feld 9 mm hoch auf der Mitte der Stelle,
+// damit die Schrift auf der Linie sitzt und nicht durchgestrichen wirkt.
+export function aiFields(items, pages, existing = []) {
+  const out = [];
+  const overlap = (a, b) => {
+    const w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x), h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+    return w > 0 && h > 0 && w * h > 0.3 * Math.min(a.w * a.h, b.w * b.h);
+  };
+  for (const it of Array.isArray(items) ? items : []) {
+    const pi = Math.round(it?.page) - 1, pg = pages[pi], b = it?.box_2d, text = String(it?.text ?? '').trim();
+    if (!pg || !Array.isArray(b) || b.length !== 4 || !b.every(Number.isFinite) || !text) continue;
+    const [y0, x0, y1, x1] = b.map(v => Math.min(1000, Math.max(0, v)) / 1000);
+    const flat = (y1 - y0) * pg.h < 9;
+    let x = x0 * pg.w, w = (x1 - x0) * pg.w, yb = (flat ? (y0 + y1) / 2 : y1) * pg.h + (flat ? 1 : 0), h = flat ? 9 : (y1 - y0) * pg.h;
+    if (w < 12) w = Math.min(60, pg.w - x);
+    const f = { page: pi, x, y: Math.max(0, yb - h), w, h: Math.min(h, yb) };
+    if (f.w <= 0 || f.h <= 0 || [...existing, ...out].some(e => e.page === pi && overlap(e, f))) continue;
+    out.push({ ...f, text });
+  }
+  return out;
+}
