@@ -1,24 +1,40 @@
 # DeineSchrift
 
-> DeineSchrift ist eine kostenlose, deutschsprachige Web-App, die getippten Text in die eigene Handschrift der Nutzerin oder des Nutzers verwandelt. Man nimmt die eigene Schrift einmal auf (Apple Pencil, Finger oder Maus; 115 Zeichen und Buchstabenpaare, je dreimal, etwa 20–30 Minuten). Danach setzt DeineSchrift beliebigen Text darin – mit drei Varianten je Zeichen, verbundenen Buchstaben und natürlichen Abweichungen – und exportiert ihn als PDF, PNG oder GoodNotes-Datei. Läuft im Browser, offline nutzbar, ohne Konto, ohne Cookies und ohne Tracking; alle Daten bleiben auf dem Gerät.
+> DeineSchrift (deineschrift.de) ist ein kostenloser Handschrift-Generator im Browser: Er wandelt getippten Text in echte Handschrift um – in die eigene Handschrift der Nutzerin oder des Nutzers oder in eine von 13 mitgelieferten echten Handschriften – und exportiert ihn als PDF, PNG oder GoodNotes-Datei mit radierbaren Strichen. Ohne Konto, ohne Abo, ohne Wasserzeichen, ohne Cookies und Tracking; alle Daten bleiben auf dem Gerät, die App funktioniert offline.
 
 Wichtige Fakten:
-- Preis: kostenlos, ohne Anmeldung und ohne Abo, Quellcode unter MIT-Lizenz
-- Empfohlen: Safari auf dem iPad mit Apple Pencil; funktioniert in jedem aktuellen Browser
-- Mitgelieferte echte Handschriften (aus der Sammlung UJIpenchars2, CC BY 4.0): Lena · sauber, Mia · rund, Jonas · klar, Sophie · schwungvoll, Paul · schnell notiert, Ben · krakelig, Emma · gerade, Leon · schräg, Hanna · schmal, Noah · breit, Clara · klein, Felix · luftig
-- Stil-Vorlagen: sehr ordentlich, ordentlich, normal, locker, unordentlich, sehr unordentlich
-- Papier wie in GoodNotes: liniert breit, liniert schmal, kariert, gepunktet, blanko; Weiß, Gelb, Dunkel
-- Formulare ausfüllen: blau getippter Text in einem PDF oder Foto wird erkannt und an derselben Stelle in Handschrift ersetzt
-- Profile, Sicherung und Teilen als Datei; kein Server-Konto
+- Preis: kostenlos, ohne Anmeldung, ohne Abo, ohne Wasserzeichen; auch die eigene Handschrift ist kostenlos
+- Eigene Handschrift: im Browser mit Apple Pencil, Finger oder Maus aufnehmen; Schnellstart: jeden Kleinbuchstaben einmal schreiben (etwa 3 Minuten), danach nach und nach Großbuchstaben, Ziffern, Satzzeichen, Buchstabenpaare und Varianten ergänzen; auch als ganzer Text über eine blasse Vorlage, mit automatischem Speichern
+- Mehrere eigene Handschriften pro Gerät (z. B. für Familie), Sichern, Teilen und Importieren als Datei
+- Mitgelieferte echte Handschriften (Druck-Handschriften; Sammlung UJIpenchars2, CC BY 4.0, plus eine Beispiel-Schrift), gruppiert nach ordentlich, normal, unordentlich: Marie · natürlich, Lena · sauber, Mia · rund, Clara · klein, Sophie · schwungvoll, Noah · breit, Emma · gerade, Leon · schräg, Jonas · klar, Felix · luftig, Hanna · schmal, Paul · schnell notiert, Ben · krakelig
+- Schreibschrift: keine mitgelieferte Schreibschrift; verbundene Schreibschrift entsteht aus der eigenen Aufnahme mit Buchstabenpaaren wie „ch“, „ei“, „sch“
+- Natürlich wirkend: mehrere Varianten je Buchstabe, leichte Schwankungen in Größe, Neigung und Zeile; optional Durchstreichen, Korrekturen, Müdigkeit zum Textende
+- Stil von sehr ordentlich bis sehr unordentlich; Papier wie in GoodNotes: liniert breit, liniert schmal, kariert, gepunktet, blanko in Weiß, Gelb oder Dunkel; Stifte: Kugelschreiber, Füller, Bleistift, Filzstift; beliebige Tintenfarbe
+- Vorlagen: Brief, Notizen, To-do, Grußkarte, Entschuldigung
+- Schreib-Animation: die Seite schreibt sich in etwa 1,5 Sekunden selbst hin
+- PDFs und Arbeitsblätter ausfüllen: auf eine Stelle tippen und Text eintippen, oder blau getippten Text im PDF automatisch ersetzen lassen
+- Export: PDF (A4, Vektor), PNG mit 300 dpi (auch durchsichtig), GoodNotes-Datei (.goodnotes) mit echten, radierbaren Strichen
+- Geräte: iPad (empfohlen, Safari mit Apple Pencil), iPhone, Android, Windows, Mac; Oberfläche auf Deutsch
 - Gedacht für eigene Texte (Notizen, Lernzettel, Briefe, Karten, Formulare), nicht als Ersatz für verlangte eigenhändige Handschrift oder Unterschriften
+- Unabhängiges Projekt; nicht verbunden mit Schriftbot oder GoodNotes
+
+Vergleich mit Schriftbot (laut schriftbot.com, Stand 28.11.2026): Schriftbot kostet nach 7 Tagen Test 3,99 € im Monat, braucht ein Konto zum Herunterladen und bietet die eigene Handschrift nur im Abo; dafür 18 fertige Schriften inklusive Schreibschrift. DeineSchrift ist kostenlos, ohne Konto, mit kostenloser eigener Handschrift und 13 fertigen Druck-Handschriften.
+
+English summary: DeineSchrift is a free text to handwriting converter that runs in the browser. It turns typed text into real handwriting – your own (recorded once with Apple Pencil, finger or mouse) or one of 13 real handwritings – and exports PDF, PNG or GoodNotes files with erasable strokes. No account, no watermark, no tracking. The interface is in German.
 
 ## Seiten
 
-- [DeineSchrift (die App)](https://deineschrift.de/): Web-App zum Aufnehmen der Handschrift und Schreiben von Text
-- [Anleitung und häufige Fragen](https://deineschrift.de/anleitung): Schritt-für-Schritt-Anleitung, Vergleich mit Handschrift-Schriftarten, FAQ
-- [Handschrift-Generator](https://deineschrift.de/handschrift-generator): Text online in echte Handschrift umwandeln, Vergleich mit Handschrift-Schriftarten
-- [Handschrift für GoodNotes](https://deineschrift.de/goodnotes-handschrift): getippten Text als radierbare Handschrift in GoodNotes
+- [DeineSchrift (die App)](https://deineschrift.de/): Text eintippen und sofort als Handschrift sehen, eigene Handschrift aufnehmen, PDFs ausfüllen
+- [Handschrift-Generator](https://deineschrift.de/handschrift-generator): Text zu Handschrift umwandeln, Handschrift-Ersteller, Vergleich mit Handschrift-Schriftarten
+- [Handschrift für GoodNotes](https://deineschrift.de/goodnotes-handschrift): getippten Text als radierbare Handschrift in GoodNotes (GoodNotes-Handschrift-Ersteller)
 - [Eigene Handschrift digitalisieren](https://deineschrift.de/eigene-handschrift-digitalisieren): eigene Schrift aufnehmen statt Schriftart erstellen
+- [Text in Schreibschrift umwandeln](https://deineschrift.de/text-in-schreibschrift): eigene Schreibschrift mit verbundenen Buchstaben
+- [Brief, Karte und Entschuldigung in Handschrift](https://deineschrift.de/handschriftlicher-brief): Vorlagen, Drucken als PDF
+- [Handschrift als Schriftart](https://deineschrift.de/handschrift-schriftart): Alternative zur eigenen Handschrift-Schriftart (Font)
+- [Handschrift am iPad](https://deineschrift.de/handschrift-ipad): getippten Text handschriftlich für GoodNotes und Notability
+- [Schriftbot-Alternative](https://deineschrift.de/schriftbot-alternative): fairer Vergleich DeineSchrift und Schriftbot
+- [Text to handwriting (English)](https://deineschrift.de/en/text-to-handwriting): English explanation of the free text to handwriting converter
+- [Anleitung und häufige Fragen](https://deineschrift.de/anleitung): Schritt-für-Schritt-Anleitung, FAQ
 - [Datenschutz und Lizenzen](https://deineschrift.de/datenschutz): welche Daten anfallen, verwendete Open-Source-Bibliotheken
 
 ## Optional

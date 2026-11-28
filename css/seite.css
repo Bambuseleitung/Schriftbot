@@ -57,3 +57,9 @@ code { font-size: 0.9em; padding: 1px 5px; border-radius: 6px; background: var(-
 
 /* Logo in echter Handschrift */
 .logo-hw { height: 28px; width: 158px; color: var(--accent, #0b6464); }
+
+/* Kurz gesagt: Antwort in Stichpunkten oben auf Themenseiten (für Leser und KI-Antworten) */
+.kurz { margin: 20px 0 8px; padding: 14px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); }
+.kurz strong { display: block; margin-bottom: 4px; }
+.kurz ul { margin: 0; padding-left: 20px; }
+.kurz li { margin: 2px 0; }
