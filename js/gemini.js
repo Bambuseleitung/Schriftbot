@@ -24,15 +24,17 @@ export function errorText(status, message = '') {
   return 'Die KI hat nicht geantwortet' + (message ? `: ${message}` : '.');
 }
 
-async function request(path, key, body) {
+async function request(path, key, body, signal) {
   let res;
   try {
     res = await fetch(`${API}/${path}`, {
+      signal,
       method: body ? 'POST' : 'GET',
       headers: { 'x-goog-api-key': key, ...(body ? { 'Content-Type': 'application/json' } : {}) },
       ...(body ? { body: JSON.stringify(body) } : {}),
     });
-  } catch {
+  } catch (err) {
+    if (err?.name === 'AbortError') throw Object.assign(new Error('Abgebrochen.'), { status: -1, aborted: true });
     throw Object.assign(new Error('Keine Verbindung zu Google. Bist du online?'), { status: 0 });
   }
   const data = await res.json().catch(() => ({}));
@@ -59,17 +61,18 @@ export const filePart = (mime, data) => ({ inline_data: { mime_type: mime, data 
 export const partsBytes = parts => parts.reduce((n, p) => n + (p.inline_data ? p.inline_data.data.length * 0.75 : (p.text || '').length), 0);
 
 // Anfrage stellen; json: Antwort als JSON lesen. Gibt Text oder das gelesene JSON zurück.
-export async function generate({ system, parts, json = false, temperature = 0.4 }) {
+// schema: festes Antwortformat (Gemini responseSchema); signal: zum Abbrechen
+export async function generate({ system, parts, json = false, schema = null, temperature = 0.4, signal }) {
   const key = store.get(KEY);
   if (!key) throw new Error('Noch kein Schlüssel eingetragen.');
   if (partsBytes(parts) > MAX_BYTES) throw new Error('Die Dateien sind zusammen zu groß (über 15 MB). Nimm weniger Material mit.');
   const body = {
     systemInstruction: { parts: [{ text: system }] },
     contents: [{ role: 'user', parts }],
-    generationConfig: { temperature, ...(json ? { responseMimeType: 'application/json' } : {}) },
+    generationConfig: { temperature, ...(json || schema ? { responseMimeType: 'application/json' } : {}), ...(schema ? { responseSchema: schema } : {}) },
   };
   let model = store.get(MODEL) || PREFER[0];
-  const call = mdl => request(`models/${mdl}:generateContent`, key, body);
+  const call = mdl => request(`models/${mdl}:generateContent`, key, body, signal);
   let data;
   try {
     data = await call(model);
@@ -82,7 +85,7 @@ export async function generate({ system, parts, json = false, temperature = 0.4 
   }
   const out = (data.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
   if (!out) throw new Error(data.promptFeedback?.blockReason ? 'Google hat die Anfrage abgelehnt (Inhaltsfilter).' : 'Die KI hat keinen Text geliefert.');
-  if (!json) return cleanAnswer(out);
+  if (!json && !schema) return cleanAnswer(out);
   try { return JSON.parse(out.replace(/^```(?:json)?\s*|\s*```$/g, '')); } catch { throw new Error('Die Antwort der KI war unvollständig. Versuch es noch einmal.'); }
 }
 

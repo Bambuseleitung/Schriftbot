@@ -103,11 +103,16 @@ console.log(`OK – Arbeitsblatt: ${fields.length} Antworten erkannt, eingepasst
     { page: 2, box_2d: [0, 0, 10, 10], text: 'falsche Seite' },
     { page: 1, box_2d: [1, 2], text: 'kaputt' }, { page: 1, box_2d: [700, 100, 750, 600], text: ' ' },
   ], pages, []);
-  assert.equal(out.length, 2);
+  assert.equal(out.length, 3);
+  assert.equal(out[2].text, '', 'Stelle ohne Antwort wird leeres Feld');
   assert.equal(out[0].text, 'Zucker');
   assert.ok(Math.abs(out[0].x - 21) < 1e-9 && Math.abs(out[0].w - 105) < 1e-9, 'x und Breite in mm');
   assert.ok(Math.abs(out[0].y + out[0].h - (297 * 0.5025 + 1)) < 1e-9 && out[0].h === 9, 'flache Stelle: Feld steht auf der Linie, 9 mm hoch');
   assert.equal(aiFields([{ page: 1, box_2d: [600, 100, 650, 600], text: 'x' }], pages, [{ page: 0, ...out[1] }]).length, 0, 'vorhandenes Feld bleibt');
   assert.deepEqual(aiFields('kein Array', pages), []);
+  // verpackt und mit Zahlen als Text
+  const wrapped = aiFields({ antworten: [{ page: '1', box_2d: ['800', '100', '850', '600'], text: 'ok' }] }, pages);
+  assert.equal(wrapped.length, 1);
+  assert.equal(wrapped[0].text, 'ok');
 }
 console.log('OK – KI-Felder');

@@ -110,7 +110,7 @@ export function initBlatt(profile) {
   });
 
   function setBusy(on) {
-    for (const b of document.querySelectorAll('#view-blatt button')) b.disabled = on;
+    for (const b of document.querySelectorAll('#view-blatt button:not(#sheet-scan-cancel)')) b.disabled = on;
   }
 
   // ---------- Ansicht ----------
@@ -195,7 +195,36 @@ export function initBlatt(profile) {
       box.append(tag, handle);
       return box;
     }));
+    placeBar(i);
   }
+
+  // Leiste mit allen Aktionen direkt über dem gewählten Feld (darunter, wenn oben kein Platz ist)
+  const bar = $('field-bar'), barHome = bar.parentElement;
+  function placeBar(i) {
+    const f = sel();
+    // Ohne gewähltes Feld zurück an ihren Platz (das Neuzeichnen einer Seite entfernt sonst die Leiste aus dem Dokument)
+    if (!f || f.page !== i || drawMode) { if (!f || drawMode) { bar.hidden = true; barHome.append(bar); } return; }
+    const { overlay } = views[i], pg = sheet.pages[i], W = overlay.clientWidth, mm = W / pg.w;
+    bar.hidden = false;
+    overlay.append(bar);
+    const bw = bar.offsetWidth, bh = bar.offsetHeight, gap = 8;
+    const above = f.y * mm - bh - gap >= 0;
+    bar.style.left = Math.max(0, Math.min(f.x * mm, W - bw)) + 'px';
+    bar.style.top = (above ? f.y * mm - bh - gap : (f.y + f.h) * mm + gap) + 'px';
+  }
+  bar.addEventListener('pointerdown', e => e.stopPropagation()); // nicht als Tipp aufs Blatt werten
+  $('fb-text').addEventListener('click', () => { textEl.focus(); textEl.scrollIntoView({ block: 'nearest' }); });
+  $('fb-reroll').addEventListener('click', () => $('field-reroll').click());
+  $('fb-delete').addEventListener('click', () => $('field-delete').click());
+  for (const [id, d] of [['fb-smaller', -0.25], ['fb-bigger', 0.25]]) $(id).addEventListener('click', () => {
+    const f = sel();
+    if (!f) return;
+    const xh = f.auto !== false ? layoutOf(f).xHeight : f.xHeight || options().xHeight;
+    f.auto = false;
+    f.xHeight = Math.min(6, Math.max(1.4, Math.round((xh + d) * 100) / 100));
+    changed(f);
+    syncEditor();
+  });
 
   function updateStatus() {
     const miss = new Set(), over = [];
@@ -462,8 +491,17 @@ export function initBlatt(profile) {
     saveFields();
     renderAll();
     syncEditor();
-    return add.length;
+    const filled = add.filter(f => f.text).length;
+    return { filled, empty: add.length - filled };
   }
+  // Scanner über dem Blatt, solange die KI arbeitet (label: Schritt; null: aus)
+  const scanEl = $('sheet-scan');
+  function scan(label) {
+    scanEl.hidden = !label;
+    if (label) $('sheet-scan-text').textContent = label;
+  }
+  let cancel = () => {};
+  $('sheet-scan-cancel').addEventListener('click', () => cancel());
   // Gewähltes Feld als Stelle für die KI: Seite ab 1, box_2d 0–1000, bisheriger Text
   function selectedBox() {
     const f = sel();
@@ -471,6 +509,6 @@ export function initBlatt(profile) {
     const pg = sheet.pages[f.page], n = v => Math.round(v * 1000);
     return { page: f.page + 1, box_2d: [n(f.y / pg.h), n(f.x / pg.w), n((f.y + f.h) / pg.h), n((f.x + f.w) / pg.w)], text: f.text || '' };
   }
-  const ai = { hasSheet: () => !!sheet, sheetName: () => sheet?.name || '', pageImages, addAiFields, selectedBox, setBusy, status: t => { statusEl.textContent = t; } };
+  const ai = { hasSheet: () => !!sheet, sheetName: () => sheet?.name || '', pageImages, addAiFields, selectedBox, setBusy, scan, onCancel: fn => { cancel = fn; }, status: t => { statusEl.textContent = t; } };
   return { render: () => { cache.clear(); renderAll(); syncEditor(); }, insertIntoField, selectedField, ai };
 }

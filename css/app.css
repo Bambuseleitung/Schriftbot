@@ -1185,3 +1185,31 @@ select:not([multiple]) { background-image: var(--chev) !important; background-re
 #ki-setup-status:empty { display: none; }
 .sheet textarea { width: 100%; min-height: 160px; margin: 8px 0; }
 .sheet input[type="text"] { width: 100%; }
+
+/* KI arbeitet: Scanner über dem Blatt */
+.view-blatt .stage { position: relative; }
+.sheet-scan { position: absolute; inset: 0; z-index: 8; pointer-events: none; overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 5%, transparent); }
+.sheet-scan[hidden] { display: none; }
+.sheet-scan-line { position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 3px;
+  background: var(--accent); box-shadow: 0 0 18px 7px color-mix(in srgb, var(--accent) 40%, transparent);
+  animation: scan 2.4s ease-in-out infinite alternate; }
+@keyframes scan { from { top: 4%; } to { top: 94%; } }
+.sheet-scan-pill { position: absolute; left: 50%; bottom: 84px; transform: translateX(-50%); pointer-events: auto;
+  display: flex; align-items: center; gap: 10px; max-width: calc(100% - 24px); padding: 10px 16px; border-radius: 999px;
+  background: var(--panel); border: 1px solid var(--border-strong); box-shadow: var(--shadow-2); font-size: 0.882rem; font-weight: 600; }
+.sheet-scan-dot { width: 9px; height: 9px; flex: none; border-radius: 50%; background: var(--accent); animation: scan-dot 1s ease-in-out infinite alternate; }
+@keyframes scan-dot { from { opacity: .35; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .sheet-scan-line { animation: none; top: 50%; } .sheet-scan-dot { animation: none; } }
+
+/* Leiste über dem gewählten Feld */
+.field-bar { position: absolute; z-index: 6; display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 14px;
+  background: var(--panel); border: 1px solid var(--border-strong); box-shadow: var(--shadow-2); white-space: nowrap; }
+.field-bar[hidden] { display: none; }
+.field-bar button { min-height: 40px; min-width: 40px; padding: 0 10px; border-radius: 10px; background: transparent; font-size: 0.824rem; font-weight: 600; }
+.field-bar button:hover { background: var(--surface-2); }
+.field-bar .icon { width: 17px; height: 17px; }
+.fb-ai { color: var(--accent); gap: 5px; }
+.fb-del, .fb-del .icon { color: var(--danger); }
+.fb-sep { width: 1px; align-self: stretch; margin: 6px 2px; background: var(--border-strong); }
+.sheet-scan-pill #sheet-scan-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

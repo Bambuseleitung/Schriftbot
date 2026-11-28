@@ -477,6 +477,22 @@
           <button id="sheet-open-empty" class="primary"><svg class="icon"><use href="#i-upload"/></svg>PDF oder Foto öffnen</button>
         </div>
         <div id="sheet-pages" class="pages sheet-pages" hidden></div>
+        <div id="sheet-scan" class="sheet-scan" hidden>
+          <div class="sheet-scan-line" aria-hidden="true"></div>
+          <div class="sheet-scan-pill" role="status" aria-live="polite"><span class="sheet-scan-dot" aria-hidden="true"></span><span id="sheet-scan-text"></span><button type="button" id="sheet-scan-cancel" class="link-btn">Abbrechen</button></div>
+        </div>
+        <div id="field-bar" class="field-bar" role="toolbar" aria-label="Feld bearbeiten" hidden>
+          <button type="button" id="fb-ki" class="fb-ai"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>KI-Antwort</button>
+          <button type="button" id="fb-short">Kürzer</button>
+          <button type="button" id="fb-new">Neu</button>
+          <span class="fb-sep" aria-hidden="true"></span>
+          <button type="button" id="fb-text" aria-label="Text bearbeiten" title="Text bearbeiten"><svg class="icon" aria-hidden="true"><use href="#i-edit"/></svg></button>
+          <button type="button" id="fb-reroll" aria-label="Neu würfeln" title="Neu würfeln"><svg class="icon" aria-hidden="true"><use href="#i-shuffle"/></svg></button>
+          <button type="button" id="fb-smaller" aria-label="Schrift kleiner" title="Schrift kleiner">A−</button>
+          <button type="button" id="fb-bigger" aria-label="Schrift größer" title="Schrift größer">A+</button>
+          <span class="fb-sep" aria-hidden="true"></span>
+          <button type="button" id="fb-delete" class="fb-del" aria-label="Feld löschen" title="Feld löschen"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></button>
+        </div>
         <div class="floatbar needs-sheet" role="toolbar" aria-label="Exportieren">
           <button id="sheet-goodnotes" class="primary"><svg class="icon"><use href="#i-book"/></svg>GoodNotes</button>
           <button id="sheet-pdf"><svg class="icon"><use href="#i-file"/></svg>PDF</button>
