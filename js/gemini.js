@@ -5,6 +5,7 @@ const KEY = 'gemini-key', MODEL = 'gemini-modell';
 const API = 'https://generativelanguage.googleapis.com/v1beta';
 // Bevorzugt die schnellen Flash-Modelle (im kostenlosen Kontingent); Lite als Ausweich bei erreichtem Limit
 const PREFER = ['gemini-flash-latest', 'gemini-flash-lite-latest'];
+export const RETRY_MS = [1500, 4000]; // Wartezeiten bei Überlastung, bevor das andere Modell versucht wird
 export const MAX_BYTES = 15e6; // Google nimmt höchstens ~20 MB je Anfrage; Luft für Base64 und Text lassen
 
 const store = {
@@ -20,7 +21,7 @@ export function errorText(status, message = '') {
   if (status === 400 && /size|too large|exceeds/i.test(message)) return 'Die Dateien sind zu groß für eine Anfrage. Nimm weniger Material mit.';
   if (status === 401 || status === 403) return 'Google lehnt den Schlüssel ab (kein Zugriff). Erstelle in Google AI Studio einen neuen Schlüssel.';
   if (status === 429) return 'Das kostenlose Tageslimit deines Schlüssels ist erreicht. Morgen geht es wieder.';
-  if (status >= 500) return 'Gemini ist gerade überlastet. Versuch es in einer Minute noch einmal.';
+  if (status >= 500) return `Gemini ist gerade überlastet (Fehler ${status}), auch nach mehreren Versuchen mit beiden Modellen. Versuch es in ein paar Minuten noch einmal.`;
   return 'Die KI hat nicht geantwortet' + (message ? `: ${message}` : '.');
 }
 
@@ -73,15 +74,27 @@ export async function generate({ system, parts, json = false, schema = null, tem
   };
   let model = store.get(MODEL) || PREFER[0];
   const call = mdl => request(`models/${mdl}:generateContent`, key, body, signal);
+  const pause = ms => new Promise((ok, fail) => {
+    const t = setTimeout(ok, ms);
+    signal?.addEventListener('abort', () => { clearTimeout(t); fail(Object.assign(new Error('Abgebrochen.'), { status: -1, aborted: true })); });
+  });
   let data;
-  try {
-    data = await call(model);
-  } catch (err) {
-    // Limit beim großen Modell erreicht oder Modell weg: einmal mit dem anderen versuchen
-    if (err.status !== 429 && err.status !== 404) throw err;
-    model = err.status === 404 ? await chooseModel(key) : PREFER.find(n => n !== model) || model;
-    store.set(MODEL, model);
-    data = await call(model);
+  // Überlastet (5xx): kurz warten und noch einmal, danach mit dem anderen Modell.
+  // Tageslimit (429) oder Modell weg (404): gleich mit dem anderen Modell.
+  for (let attempt = 0, switched = false; ; attempt++) {
+    try {
+      data = await call(model);
+      break;
+    } catch (err) {
+      const busy = err.status >= 500;
+      if (!busy && err.status !== 429 && err.status !== 404) throw err;
+      if (busy && attempt < 2) { await pause(RETRY_MS[attempt]); continue; }
+      if (switched) throw err;
+      model = err.status === 404 ? await chooseModel(key) : PREFER.find(n => n !== model) || model;
+      store.set(MODEL, model);
+      switched = true;
+      attempt = -1;
+    }
   }
   const out = (data.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').trim();
   if (!out) throw new Error(data.promptFeedback?.blockReason ? 'Google hat die Anfrage abgelehnt (Inhaltsfilter).' : 'Die KI hat keinen Text geliefert.');

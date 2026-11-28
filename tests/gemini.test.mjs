@@ -48,6 +48,18 @@ reply = url => (url.includes('gemini-flash-latest:') ? { status: 429, body: { er
 assert.equal(await G.generate({ system: 's', parts: [G.textPart('x')] }), 'ok');
 assert.equal(mem.get('gemini-modell'), 'gemini-flash-lite-latest');
 
+// Überlastet (503): zweimal warten und wiederholen, dann mit dem anderen Modell; Erfolg dort
+G.RETRY_MS[0] = G.RETRY_MS[1] = 1;
+mem.set('gemini-modell', 'gemini-flash-latest');
+calls.length = 0;
+reply = url => (url.includes('gemini-flash-latest:') ? { status: 503, body: { error: { message: 'overloaded' } } } : answer('geschafft'));
+assert.equal(await G.generate({ system: 's', parts: [G.textPart('x')] }), 'geschafft');
+assert.deepEqual(calls.map(k => k.url.match(/models\/([^:]+)/)[1]), ['gemini-flash-latest', 'gemini-flash-latest', 'gemini-flash-latest', 'gemini-flash-lite-latest']);
+// Beide Modelle überlastet: verständliche Meldung mit Fehlercode
+reply = () => ({ status: 503, body: { error: { message: 'overloaded' } } });
+await assert.rejects(G.generate({ system: 's', parts: [G.textPart('x')] }), /überlastet \(Fehler 503\)/);
+mem.set('gemini-modell', 'gemini-flash-latest');
+
 // Verständliche Fehler, kaputtes JSON
 reply = () => ({ status: 400, body: { error: { message: 'API key not valid. Please pass a valid API key.' } } });
 await assert.rejects(G.generate({ system: 's', parts: [G.textPart('x')] }), /Schlüssel ist ungültig/);
